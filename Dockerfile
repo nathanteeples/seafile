@@ -6,7 +6,7 @@
 
 FROM seafileltd/notification-server:14.0.8-testing@sha256:bc6fe81de7c1af2dc08c184f2a3d558e21eca493c5362a2fc725e20a88fbb280 AS notification
 
-FROM seafileltd/seafile-mc:14.0.8-testing@sha256:a0b5e08392df7ad1958bf15d33344823f2eabaeedabb022458f499b5154ad4ed
+FROM seafileltd/seafile-pro-mc:14.0.8-testing@sha256:d8fde0abfac0e2e9d8ba2e61fb5942a901c33499056a1e212a766dd67fd54e6e
 
 LABEL org.opencontainers.image.title="seafile (Unraid)" \
       org.opencontainers.image.description="Seafile for Unraid in one container: generated secrets, optional built-in MariaDB, Redis and notification server." \
@@ -39,9 +39,16 @@ RUN sed -i 's|^    location / {|    include /etc/nginx/seafile.d/*.conf;\n\n&|' 
 # Seahub imports seahub/local_settings.py if it exists, and that is where the web
 # office from the template goes in. The grep stops the build if upstream drops
 # the import.
-RUN seahub="/opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/seahub" \
- && grep -q '^    import seahub.local_settings$' "$seahub/settings.py" \
- && mv /usr/local/share/seafile/local_settings.py "$seahub/"
+RUN for base in "/opt/seafile/seafile-pro-server-${SEAFILE_VERSION}" "/opt/seafile/seafile-server-${SEAFILE_VERSION}"; do \
+     if [ -d "$base" ]; then \
+       seahub="$base/seahub/seahub"; \
+       grep -q '^    import seahub.local_settings$' "$seahub/settings.py"; \
+       mv /usr/local/share/seafile/local_settings.py "$seahub/"; \
+       exit 0; \
+     fi; \
+   done; \
+   echo "No Seafile server directory found for version ${SEAFILE_VERSION}" >&2; \
+   exit 1
 
 # The stock setup has no fallback for the database names and quits without them.
 # Seafile's own logs go to the container log, which is where Unraid users look

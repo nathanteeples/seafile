@@ -92,7 +92,7 @@ The libraries and files in these pictures are made up.
 
 ## 2. What it does
 
-[Seafile](https://www.seafile.com) syncs and shares files, with desktop and mobile clients, libraries you can encrypt on the client and built-in wikis. Its official image [`seafileltd/seafile-mc`](https://hub.docker.com/r/seafileltd/seafile-mc) expects MariaDB, Redis and a notification server as containers of their own, plus a JWT key made by hand. This image is the official one with a small layer in front:
+[Seafile](https://www.seafile.com) syncs and shares files, with desktop and mobile clients, libraries you can encrypt on the client and built-in wikis. Its official image [`seafileltd/seafile-pro-mc`](https://hub.docker.com/r/seafileltd/seafile-pro-mc) expects MariaDB, Redis and a notification server as containers of their own, plus a JWT key made by hand. This image is the official one with a small layer in front:
 
 - **Secrets on the first start.** It generates the JWT key, the database password and, if you leave it empty, the admin password, and keeps them in `secrets.env` in your appdata folder.
 - **MariaDB and Redis built in, if you want them.** Both are off by default, because most Unraid servers already have a MariaDB. Switched on, they run next to Seafile and listen only on `127.0.0.1`.
@@ -127,7 +127,7 @@ docker run -d --name seafile \
   junkerderprovinz/seafile:latest
 ```
 
-Coming from another Seafile template: point **Data** at the same folder, copy over the hostname, the database and Redis settings and the `JWT_PRIVATE_KEY`, and keep **Built-in MariaDB** off. Back up first: a Seafile 13 database is upgraded on the first start, and there is no way back. Every other variable of the official image works as the [Seafile manual](https://manual.seafile.com/latest/setup/setup_ce_by_docker/) describes it.
+Coming from another Seafile template: point **Data** at the same folder, copy over the hostname, the database and Redis settings and the `JWT_PRIVATE_KEY`, and keep **Built-in MariaDB** off. Back up first: a Seafile 13 database is upgraded on the first start, and there is no way back. Every other variable of the official image works as the [Seafile manual](https://manual.seafile.com/docker/deploy_seafile_with_docker/) describes it.
 
 <br>
 
@@ -177,4 +177,4 @@ If it has earned a place on your server or computer, toss a coin to your knight:
 
 <br>
 
-<sub>Seafile is released by Seafile Ltd., the Community Edition server under AGPL-3.0. This is an independent packaging for Unraid and is not affiliated with Seafile Ltd.</sub>
+<sub>Seafile is released by Seafile Ltd. This is an independent packaging for Unraid and is not affiliated with Seafile Ltd.</sub>
